@@ -1,0 +1,18 @@
+/* Grid.css */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Creates 2 columns of equal width */
+  grid-template-rows: repeat(2, 1fr); /* Creates 2 rows of equal height */
+  gap: 10px; /* Adds 10px gap between grid items */
+  width: 400px; /* Sets the width of the grid container */
+  height: 400px; /* Sets the height of the grid container */
+}
+
+.grid-item {
+  background-color: #eee;
+  border: 1px solid #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+}
