@@ -19,10 +19,17 @@ function App() {
   const [pitchSliderValue, setPitchSliderValue] = useState(0.0);
   const [variationSliderValue, setVariationSliderValue] = useState(0.0);
 
+  // URLs to generated samples
+  const [fileUrls, setFileUrls] = useState([]);
+
+  // loading state for generating samples
+  const [loading, setLoading] = useState(false);
+
   return (
     <>
       <div style={{ display: "flex", padding: "50px", flexDirection: "row" }}>
         <div style={{ marginRight: "100px" }}>
+          <h2>Place Sample Here</h2>
           <AudioDropZone audioFile={audioFile} setAudioFile={setAudioFile} />
         </div>
         <div
@@ -33,16 +40,16 @@ function App() {
           }}
         >
           <div>
-            <GeneratedSample index={1} />
+            <GeneratedSample index={1} audioFileURL={fileUrls[0]} />
           </div>
           <div>
-            <GeneratedSample index={2} />
+            <GeneratedSample index={2} audioFileURL={fileUrls[1]} />
           </div>
           <div>
-            <GeneratedSample index={3} />
+            <GeneratedSample index={3} audioFileURL={fileUrls[2]} />
           </div>
           <div>
-            <GeneratedSample index={4} />
+            <GeneratedSample index={4} audioFileURL={fileUrls[3]} />
           </div>
         </div>
       </div>
@@ -67,7 +74,13 @@ function App() {
         </div>
       </div>
       <div style={{ marginLeft: "50px" }}>
-        <GenerateButton />
+        {
+          <GenerateButton
+            audioFile={audioFile}
+            fileUrls={fileUrls}
+            setFileUrls={setFileUrls}
+          />
+        }
       </div>
     </>
   );
