@@ -1,17 +1,23 @@
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import React, { useState } from "react";
+import React, { useCallback, useState, useRef, useEffect } from "react";
 
-function GenerateButton({ audioFile, fileUrls, setFileUrls }) {
+function GenerateButton({
+  audioFile,
+  fileUrls,
+  setFileUrls,
+  setAllFileUrls,
+  count,
+  setCount,
+}) {
   const [loading, setLoading] = useState(false);
   const showToastErrorMessage = () => {
-    toast.error("Sample generation failed!", {
+    toast.error("Sample generation failed! File cannot be read.", {
       position: "bottom-right",
     });
   };
   const handleSampleGeneration = async () => {
     // set loading state
-    // setFileUrls([]);
     setLoading(true);
     // create request body
     const formData = new FormData();
@@ -24,19 +30,44 @@ function GenerateButton({ audioFile, fileUrls, setFileUrls }) {
       });
       if (!response.ok) {
         setLoading(false);
-        return { showToastErrorMessage };
+        showToastErrorMessage();
       }
       // parse and update response
       const data = await response.json();
       setFileUrls(data.file_urls);
       setLoading(false);
-      console.log(data.file_urls);
+      setCount(count + 1);
     } catch {
-      console.error("Error generating audio samples:", error);
       setLoading(false);
-      return { showToastErrorMessage };
+      showToastErrorMessage();
     }
   };
+
+  useEffect(() => {
+    const fetchLinks = async () => {
+      if (audioFile) {
+        try {
+          const response = await fetch(
+            "http://127.0.0.1:8000/api/get_all_audio",
+            {
+              method: "GET",
+            }
+          );
+          if (!response.ok) {
+            return { showToastErrorMessage };
+          }
+          // parse and update response
+          const data = await response.json();
+          console.log(data.file_urls);
+          setAllFileUrls(data.file_urls);
+        } catch {
+          console.error("Error retrieving audio samples:", error);
+          return { showToastErrorMessage };
+        }
+      }
+    };
+    fetchLinks();
+  }, [fileUrls]);
 
   return (
     <div>
@@ -47,6 +78,7 @@ function GenerateButton({ audioFile, fileUrls, setFileUrls }) {
       >
         Generate Samples
       </button>
+      <ToastContainer />
     </div>
   );
 }

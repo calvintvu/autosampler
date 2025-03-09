@@ -4,12 +4,14 @@ import WaveSurfer from "wavesurfer.js";
 import Timeline from "wavesurfer.js/dist/plugins/timeline";
 import Hover from "wavesurfer.js/dist/plugins/hover";
 
-import "./App.css";
+import "./styles/App.css";
 
 import AudioDropZone from "./components/AudioDropZone";
 import Slider from "./components/Slider";
 import GeneratedSample from "./components/GeneratedSample";
 import GenerateButton from "./components/GenerateButton";
+import RecentlyGenerated from "./components/RecentlyGenerated";
+import InfoHeaders from "./components/InfoHeaders";
 
 function App() {
   // current audio file for sample inference
@@ -22,11 +24,20 @@ function App() {
   // URLs to generated samples
   const [fileUrls, setFileUrls] = useState([]);
 
+  // URLs to ALL generated samples -> make a recently generated list
+  const [allFileUrls, setAllFileUrls] = useState([]);
+
   // loading state for generating samples
   const [loading, setLoading] = useState(false);
 
+  // counter to signal showing recently generated samples
+  const [count, setCount] = useState(0);
+
   return (
     <>
+      <div>
+        <InfoHeaders />
+      </div>
       <div style={{ display: "flex", padding: "50px", flexDirection: "row" }}>
         <div style={{ marginRight: "100px" }}>
           <h2>Place Sample Here</h2>
@@ -74,13 +85,35 @@ function App() {
         </div>
       </div>
       <div style={{ marginLeft: "50px" }}>
-        {
-          <GenerateButton
-            audioFile={audioFile}
-            fileUrls={fileUrls}
-            setFileUrls={setFileUrls}
-          />
-        }
+        {audioFile && (
+          <div>
+            <GenerateButton
+              audioFile={audioFile}
+              fileUrls={fileUrls}
+              setFileUrls={setFileUrls}
+              setAllFileUrls={setAllFileUrls}
+              count={count}
+              setCount={setCount}
+            />
+          </div>
+        )}
+      </div>
+      <div style={{ marginLeft: "50px", marginBottom: "15px" }}>
+        {allFileUrls.length > 0 && (
+          <div>
+            <h2>Recently Generated Samples</h2>
+            {allFileUrls.map((url, index) => (
+              <li key={index}>
+                <RecentlyGenerated
+                  audioFileURL={url}
+                  fileUrls={fileUrls}
+                  allFileUrls={allFileUrls}
+                  setAllFileUrls={setAllFileUrls}
+                />
+              </li>
+            ))}
+          </div>
+        )}
       </div>
     </>
   );

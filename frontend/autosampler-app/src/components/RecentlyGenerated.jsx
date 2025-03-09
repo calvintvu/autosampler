@@ -3,7 +3,12 @@ import WaveSurfer from "wavesurfer.js";
 import Hover from "wavesurfer.js/dist/plugins/hover";
 import axios from "axios";
 
-function GeneratedSample({ index, audioFileURL }) {
+function RecentlyGenerated({
+  audioFileURL,
+  fileUrls,
+  allFileUrls,
+  setAllFileUrls,
+}) {
   // reference to audio player
   const wavesurferRef = useRef(null);
 
@@ -49,9 +54,7 @@ function GeneratedSample({ index, audioFileURL }) {
   };
 
   useEffect(() => {
-    if (audioFileURL) {
-      console.log(index + audioFileURL);
-
+    if (audioFileURL && allFileUrls.length > 0) {
       // retrieve audio file from API using URL
       if (!wavesurferRef.current) {
         wavesurferRef.current = WaveSurfer.create({
@@ -60,6 +63,8 @@ function GeneratedSample({ index, audioFileURL }) {
           progressColor: "#555",
           cursorColor: "#ffffff",
           backend: "WebAudio",
+          height: 32,
+          width: 400,
           normalize: true,
           plugins: [
             Hover.create({
@@ -84,22 +89,12 @@ function GeneratedSample({ index, audioFileURL }) {
         `http://127.0.0.1:8000/api/get_audio/${audioFileURL}`
       );
     }
-  }, [audioFileURL]);
+  }, [audioFileURL, fileUrls, allFileUrls]);
+
   return (
     <div>
-      <div
-        style={{
-          marginRight: "100px",
-          border: "3px solid  #ffffff",
-          borderRadius: "1px",
-          textAlign: "center",
-          marginBottom: "1rem",
-          cursor: "pointer",
-          height: "200px",
-          width: "325px",
-        }}
-      >
-        <div style={{ padding: "7px" }}>Generated Sample {index}</div>
+      <div>
+        <div style={{ padding: "7px" }}></div>
         {audioFileURL && (
           <div>
             <div ref={waveformRef} onClick={handlePlayPause} />
@@ -116,4 +111,4 @@ function GeneratedSample({ index, audioFileURL }) {
   );
 }
 
-export default GeneratedSample;
+export default RecentlyGenerated;

@@ -1,14 +1,14 @@
 import React, { useCallback, useState, useRef, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import WaveSurfer from "wavesurfer.js";
-import Timeline from "wavesurfer.js/dist/plugins/timeline";
 import Hover from "wavesurfer.js/dist/plugins/hover";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function AudioDropZone({ audioFile, setAudioFile }) {
   // max file upload size
-  const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 megabytes
-  // current audio file
-  //   const [audioFile, setAudioFile] = useState(null);
+  const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2 megabytes
+
   const [isPlaying, setIsPlaying] = useState(false);
 
   // reference to audio player
@@ -22,13 +22,30 @@ function AudioDropZone({ audioFile, setAudioFile }) {
     console.log("Updating audio file");
     if (acceptedFiles && acceptedFiles.length > 0) {
       setAudioFile(acceptedFiles[0]);
+    } else {
+      showToastWarnMessage();
     }
   }, []);
+
+  const showToastWarnMessage = () => {
+    toast.warn(
+      "Audio upload failed! Make sure to upload only audio files no more than 2MB.",
+      {
+        position: "bottom-right",
+      }
+    );
+  };
+
+  const showToastErrorMessage = () => {
+    toast.error("File cannot be read!", {
+      position: "bottom-right",
+    });
+  };
 
   // Configure react-dropzone to accept only audio
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    // maxSize: MAX_FILE_SIZE,
+    maxSize: MAX_FILE_SIZE,
     accept: {
       "audio/*": [], // Accept any audio type
     },
@@ -37,6 +54,8 @@ function AudioDropZone({ audioFile, setAudioFile }) {
 
   const handlePlayPause = () => {
     if (wavesurferRef.current) {
+      // start sample playback from beginning
+      wavesurferRef.current.seekTo(0);
       wavesurferRef.current.playPause();
       console.log("clicking waveform");
       setIsPlaying(!isPlaying);
@@ -53,14 +72,8 @@ function AudioDropZone({ audioFile, setAudioFile }) {
           progressColor: "#555",
           cursorColor: "#ffffff",
           backend: "WebAudio",
+          normalize: true,
           plugins: [
-            Timeline.create({
-              container: "#wave-timeline",
-              primaryColor: "#ffffff",
-              secondaryColor: "#ffffff",
-              primaryFontColor: "#ffffff",
-              secondaryFontColor: "#ffffff",
-            }),
             Hover.create({
               lineColor: "red",
               lineWidth: 2,
@@ -84,6 +97,7 @@ function AudioDropZone({ audioFile, setAudioFile }) {
       }
 
       // read file and load it as a blob
+
       const reader = new FileReader();
       reader.onload = (event) => {
         const audioData = event.target.result;
@@ -127,7 +141,6 @@ function AudioDropZone({ audioFile, setAudioFile }) {
         {audioFile && (
           <div>
             <div ref={waveformRef} onClick={handlePlayPause} />
-            <div id="wave-timeline" />
             <div className="flex items-center gap-4 p-4">
               <button
                 onClick={handlePlayPause}
@@ -154,6 +167,7 @@ function AudioDropZone({ audioFile, setAudioFile }) {
           </div>
         )}
       </div>
+      <ToastContainer />
     </div>
   );
 }
