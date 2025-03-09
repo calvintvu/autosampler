@@ -10,6 +10,7 @@ function GenerateButton({
   count,
   setCount,
 }) {
+  const apiEndpointURL = import.meta.env.VITE_GET_API_URL;
   const [loading, setLoading] = useState(false);
   const showToastErrorMessage = () => {
     toast.error("Sample generation failed! File cannot be read.", {
@@ -24,7 +25,7 @@ function GenerateButton({
     formData.append("file", audioFile);
     // call generate samples api
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/generate", {
+      const response = await fetch(`${apiEndpointURL}/api/generate`, {
         method: "POST",
         body: formData,
       });
@@ -47,12 +48,9 @@ function GenerateButton({
     const fetchLinks = async () => {
       if (audioFile) {
         try {
-          const response = await fetch(
-            "http://127.0.0.1:8000/api/get_all_audio",
-            {
-              method: "GET",
-            }
-          );
+          const response = await fetch(`${apiEndpointURL}/api/get_all_audio`, {
+            method: "GET",
+          });
           if (!response.ok) {
             return { showToastErrorMessage };
           }

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import React from "react";
 import WaveSurfer from "wavesurfer.js";
-import Timeline from "wavesurfer.js/dist/plugins/timeline";
-import Hover from "wavesurfer.js/dist/plugins/hover";
+import Timeline from "wavesurfer.js/dist/plugins/timeline.js";
+import Hover from "wavesurfer.js/dist/plugins/hover.js";
 
 import "./styles/App.css";
 

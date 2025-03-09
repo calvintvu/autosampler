@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useRef, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import WaveSurfer from "wavesurfer.js";
-import Hover from "wavesurfer.js/dist/plugins/hover";
+import Hover from "wavesurfer.js/dist/plugins/hover.js";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 

@@ -1,9 +1,10 @@
 import React, { useCallback, useState, useRef, useEffect } from "react";
 import WaveSurfer from "wavesurfer.js";
-import Hover from "wavesurfer.js/dist/plugins/hover";
+import Hover from "wavesurfer.js/dist/plugins/hover.js";
 import axios from "axios";
 
 function GeneratedSample({ index, audioFileURL }) {
+  const apiEndpointURL = import.meta.env.VITE_GET_API_URL;
   // reference to audio player
   const wavesurferRef = useRef(null);
 
@@ -25,7 +26,7 @@ function GeneratedSample({ index, audioFileURL }) {
     try {
       // make call to API
       const response = await axios.get(
-        `http://127.0.0.1:8000/api/get_audio/${audioFileURL}`,
+        `${apiEndpointURL}/api/get_audio/${audioFileURL}`,
         { responseType: "blob" }
       );
 
@@ -81,7 +82,7 @@ function GeneratedSample({ index, audioFileURL }) {
         });
       }
       wavesurferRef.current.load(
-        `http://127.0.0.1:8000/api/get_audio/${audioFileURL}`
+        `${apiEndpointURL}/api/get_audio/${audioFileURL}`
       );
     }
   }, [audioFileURL]);
