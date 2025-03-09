@@ -1,0 +1,26 @@
+services:
+  frontend:
+    container_name: "frontend"
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile
+      args:
+        - VITE_GET_API_URL=http://127.0.0.1:8000
+    platform: linux/amd64
+    restart: always
+    ports:
+      - "3000:3000"
+    expose:
+      - 3000
+
+  backend:
+    container_name: "backend"
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile
+    platform: linux/amd64
+    restart: always
+    ports:
+      - "8000:8000"
+    expose:
+      - 8000
