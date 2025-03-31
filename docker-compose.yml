@@ -6,7 +6,7 @@ services:
       dockerfile: ./Dockerfile
       args:
         - VITE_GET_API_URL=http://127.0.0.1:8000
-    platform: linux/amd64
+    # platform: linux/amd64
     restart: always
     ports:
       - "3000:3000"
@@ -18,9 +18,24 @@ services:
     build:
       context: ./backend
       dockerfile: ./Dockerfile
-    platform: linux/amd64
+    # platform: linux/amd64
     restart: always
     ports:
       - "8000:8000"
     expose:
       - 8000
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_DETAILS=mongodb://mongodb:27017
+
+  mongodb:
+    image: mongo:latest
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
