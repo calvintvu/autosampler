@@ -9,8 +9,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        with:
-          path: backend
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -18,7 +16,7 @@ jobs:
           python-version: '3.9'
           
       - name: Install dependencies
-       working-directory: backend
+        working-directory: ./backend
         run: |
           python -m venv venv
           source venv/bin/activate
@@ -26,13 +24,13 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run pytest
-       working-directory: backend
+        working-directory: ./backend
         run: |
           source venv/bin/activate
           pytest
 
       - name: Cleanup
-       working-directory: backend
+        working-directory: ./backend
         run: |
           deactivate || true
           rm -rf venv
