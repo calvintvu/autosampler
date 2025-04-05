@@ -169,3 +169,10 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+backend/model_cache
+backend/.venv
+backend/.pytest_cache
+backend/__pycache__
+backend/.env
+.DS_Store

@@ -14,7 +14,6 @@ export default function AudioWaveform({ audioUrl, height = 128 }) {
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     if (!waveformRef.current || !audioUrl) return;
@@ -50,7 +49,6 @@ export default function AudioWaveform({ audioUrl, height = 128 }) {
     // Listen for errors during the load process
     wavesurferRef.current.on("error", (err) => {
       console.error("WaveSurfer error:", err);
-      setHasError(true);
     });
 
     // Load audio

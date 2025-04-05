@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import AudioUploader from "@/components/audio-uploader";
 import SampleTracks from "@/components/sample-tracks";
 import AudioCarousel from "@/components/audio-carousel";
-
+import { Toaster, toast } from "sonner";
 // Sample audio tracks
 const sampleTracks = ["1", "2"];
 
@@ -11,6 +11,7 @@ const apiEndpointURL = import.meta.env.VITE_GET_API_URL;
 export default function AudioWaveformPage() {
   const [uploadedFile, setUploadedFile] = useState(null);
   const [uploadedAudioUrl, setUploadedAudioUrl] = useState("");
+  const [processingResult, setProcessingResult] = useState(null);
 
   // URLs to generated samples
   const [generatedFileUrls, setGeneratedFileUrls] = useState(sampleTracks);
@@ -22,6 +23,7 @@ export default function AudioWaveformPage() {
   useEffect(() => {
     const onPageLoad = async () => {
       try {
+        console.log(`${apiEndpointURL}/api/get_all_audio`);
         const response = await fetch(`${apiEndpointURL}/api/get_all_audio`, {
           method: "GET",
         });
@@ -59,6 +61,13 @@ export default function AudioWaveformPage() {
     }
   };
 
+  useEffect(() => {
+    if (processingResult)
+      if (processingResult) {
+        toast("Audio processed successfully! Added to your library.");
+      }
+  }, [processingResult]);
+
   return (
     <main className="container mx-auto p-4 min-h-screen">
       <h1 className="text-6xl font-bold mb-6 py-8">Drum Sample Generator</h1>
@@ -84,6 +93,7 @@ export default function AudioWaveformPage() {
             setGeneratedFileUrls={setGeneratedFileUrls}
             allFileUrls={allFileUrls}
             setAllFileUrls={setAllFileUrls}
+            setMainProcessResult={setProcessingResult}
           />
         </div>
         {/* Right side waveforms */}

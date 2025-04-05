@@ -15,6 +15,7 @@ export default function AudioUploader({
   generatedFileUrls,
   allFileUrls,
   setAllFileUrls,
+  setMainProcessResult,
 }) {
   const fileInputRef = useRef(null);
   const [processingResult, setProcessingResult] = useState(null);
@@ -75,6 +76,7 @@ export default function AudioUploader({
 
   const handleProcessAudio = (result) => {
     setProcessingResult(result);
+    setMainProcessResult(result);
     if (processingResult) {
       toast("Audio processed successfully! Added to your library.");
     }

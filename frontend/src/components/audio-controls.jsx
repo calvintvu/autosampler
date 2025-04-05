@@ -2,16 +2,17 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Toaster, toast } from "sonner";
+import { Loader2, Wand2 } from "lucide-react";
 
 export default function AudioControls({
   audioFile,
   setGeneratedFileUrls,
-  generatedFileUrls,
   setAllFileUrls,
   onProcessAudio,
 }) {
   const [speed, setSpeed] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [processingResult, setProcessingResult] = useState(null);
 
   const apiEndpointURL = import.meta.env.VITE_GET_API_URL;
 
@@ -39,15 +40,19 @@ export default function AudioControls({
       if (onProcessAudio) {
         onProcessAudio(data);
       }
-      console.log(data.file_urls);
-      console.log("end of handle sample generation.");
-      //   setGeneratedFileUrls(data.file_urls);
       setLoading(false);
       setGeneratedFileUrls(data.file_urls);
-      console.log(generatedFileUrls);
+      handleProcessAudio(data);
     } catch {
       setLoading(false);
       toast.error("Error generating samples.");
+    }
+  };
+
+  const handleProcessAudio = (result) => {
+    setProcessingResult(result);
+    if (processingResult) {
+      toast("Audio processed successfully! Added to your library.");
     }
   };
 
@@ -73,16 +78,26 @@ export default function AudioControls({
       }
     };
     fetchLinks();
-  }, [generatedFileUrls]);
+  }, [audioFile, setAllFileUrls]);
 
   return (
     <div>
       <Button
+        className="w-full"
         onClick={handleSampleGeneration}
         disabled={loading}
-        className="w-full"
       >
-        Generate Samples
+        {loading ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Generating...
+          </>
+        ) : (
+          <>
+            <Wand2 className="mr-2 h-4 w-4" />
+            Generate Samples
+          </>
+        )}
       </Button>
 
       {/* Two sliders stacked vertically */}

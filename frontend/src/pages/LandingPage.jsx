@@ -2,9 +2,8 @@
 
 import { useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
-import { MusicIcon, AudioWaveformIcon as WaveformIcon } from "lucide-react";
 import React from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 
 function FloatingPaths({ position, count = 8 }) {
   const paths = Array.from({ length: count }, (_, i) => ({
@@ -164,7 +163,20 @@ export default function LandingPage({
           </div>
         </motion.div>
         <div className="mt-16 text-center text-gray-500">
-          <p>© 2025 Autosampler, Calvin Vu</p>
+          <p>© 2025 Autosampler (in development), by Calvin Vu</p>
+        </div>
+        <div className="mt-16 text-center text-gray-500">
+          <p>
+            View source code{" "}
+            <a
+              href="https://github.com/calvintvu/autosampler"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline text-blue-500"
+            >
+              here
+            </a>
+          </p>
         </div>
       </div>
     </div>
